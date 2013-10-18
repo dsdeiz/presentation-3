@@ -20,158 +20,60 @@
       <div class="slides">
 
         <section>
-          <h2>Intro to SimpleTest</h2>
-          <ul>
-            <li>Drupal's custom testing framework.</li>
-            <li>Creates a separate instance of Drupal for testing.</li>
-            <li>Automate tests.</li>
-          </ul>
+        <h1>Chaos tool suite</h1>
         </section>
 
         <section>
-          <h2>Benefits of SimpleTest</h2>
-          <ul>
-            <li>Incompatibilities</li>
-            <li>Errors</li>
-          </ul>
+        <h2>What is it?</h2>
+        <p>No need to explain. Everybody uses it! :D</p>
         </section>
 
         <section>
-          <h2>Setup</h2>
-          <ul>
-            <li>CURL extension for PHP</li>
-            <li>PHP <a href="http://php.net/manual/en/ini.core.php#ini.open-basedir" rel="nofollow">open_basedir</a> restriction needs to be disabled.</li>
-            <li>DOM extension for PHP. DOM support is included by default in php5.</li>
-            <li>Recommended PHP memory limit of 256MB.</li>
-          </ul>
+        <h2>What are its features?</h2>
+        <p>Atm, according to its <a href="https://drupal.org/project/ctools">project page</a>:</p>
+        <ul>
+          <li>Plugins</li>
+          <li>Exportables</li>
+          <li>Ajax responder</li>
+          <li>Form tools</li>
+          <li>Object caching</li>
+          <li>Contexts</li>
+          <li>Modal dialog</li>
+          <li>Dependent</li>
+          <li>Content</li>
+          <li>Form wizard</li>
+          <li>CSS tools</li>
+        </ul>
         </section>
 
         <section>
-          <h2>Running Tests</h2>
-          <ul>
-            <li>
-              Via Web UI
-              <ul>
-                <li>Enable Testing module.</li>
-                <li>Access <em>admin/config/development/testing</em>.</li>
-                <li>Select a group to test</li>
-                <li>Press <em>Run tests</em>.</li>
-              </ul>
-            </li>
-            <li>Via <code>./scripts/run-tests.sh.</code></li>
-            <li>Via <code>drush test-run</code>.</li>
-          </ul>
+        <h3>Where do I find the docs for using these? I.e. the API itself.</h3>
+        <ul>
+          <li>Install <a href="https://drupal.org/project/advanced_help">advanced_help</a>. Unfortunately, the documentation here isn't complete.</li>
+          <li>For plugins such as Content Types, Arguments, or Context, you can check the plugins provided by ctools itself under ctools/plugins/.</li>
+          <li>Check the comments on the files themselves e.g. ctools/includes/jump-menu.inc.</li>
+          <li>Install the example modules provided by ctools specifically <code>ctools_ajax_sample</code>, <code>ctools_custom_content</code>, and <code>ctools_plugin_example</code>.
+        </ul>
         </section>
 
         <section>
-          <h2>Assertions</h2>
-          <p><a href="http://drupal.org/node/265828">http://drupal.org/node/265828</a></p>
+        <h2>Show me the money (or examples).</h2>
+        <ul>
+          <li><a href="https://github.com/dsdeiz/Practice-Modules">Practice Modules</a></li>
+          <li>Grinnell Megamenu</li>
+          <li><a href="http://webhead.grinnell.edu/">This</a>.</li>
+          <li><a href="http://forum.grinnell.edu/activities/events">And this</a>.</li>
+        </ul>
+        <p>(Note to self: Pakita para maglaba. xD)</p>
         </section>
 
         <section>
-          <h2>DrupalWebTestCase</h2>
-          <p>Creates a fresh installation of Drupal with tables in a prefix <strong>simpletest*</strong> and has a virtual browser.</p>
+        Extra: Check out <a href="http://www.emmet.io/">Emmet</a>. :D
         </section>
 
         <section>
-          <h2>DrupalWebTestCase</h2>
-          <pre><code class="php">
-class ExampleTestCase extends DrupalWebTestCase {
-
-  public static function getInfo() {
-    return array(
-      'name' => 'Name',
-      'description' => 'Description',
-      'group' => 'Group',
-    );
-  }
-
-  public function setUp() {
-    parent::setUp('example_module');
-  }
-}
-          </code></pre>
-        </section>
-
-        <section>
-          <h2>DrupalUnitTestCase</h2>
-          <p>Doesn't create tables, and is lighter and faster.</p>
-        </section>
-
-        <section>
-          <h2>DrupalUnitTestCase</h2>
-          <pre><code class="php">
-class ExampleUnitTestCase extends DrupalUnitTestCase {
-
-  public static function getInfo() {
-    return array(
-      'name' => 'Name',
-      'description' => 'Description',
-      'group' => 'Group',
-    );
-  }
-
-  public function setup() {
-    drupal_load('module', 'example_module');
-    parent::setUp();
-  }
-}
-          </code></pre>
-        </section>
-
-        <section>
-          <h2>Real World Examples</h2>
-          <ol>
-            <li><a target="_blank" href="http://drupalcode.org/project/imis_auth.git/blob/refs/heads/7.x-1.x:/tests/imis_auth.test">iMIS Auth</a></li>
-            <li><a target="_blank" href="http://drupalcode.org/project/entity_js.git/blob/refs/heads/7.x-1.x:/entity_js.test">entity_js</a></li>
-          </ol>
-        </section>
-
-        <section>
-          <h2>Really Real World Examples</h2>
-          <p><a href="http://api.drupal.org/api/search/7/.test">http://api.drupal.org/api/search/7/.test</a></p>
-        </section>
-
-        <section>
-          <h2>Demo!</h2>
-          <p><a href="https://github.com/dsdeiz/testing-testing">https://github.com/dsdeiz/testing-testing</a></p>
-        </section>
-
-        <section>
-          <h3>Web Test Cases</h3>
-          <ul>
-            <li>Employee CRUD</li>
-            <li>Department CRUD</li>
-            <li>Overview Page Access</li>
-          </ul>
-        </section>
-
-        <section>
-          <h3>Unit Test Cases</h3>
-          <ul>
-            <li>Employee Positions</li>
-            <li>Salary Validation</li>
-            <li>SalaryDeduction</li>
-          </ul>
-        </section>
-
-        <section>
-          <h2>Resources and References</h2>
-          <ul>
-            <li><a href="http://drupal.org/simpletest">SimpleTest Handbook</a></li>
-            <li><a href="http://drupal.org/project/examples">Examples contrib module</a></li>
-            <li>
-              Improving speed:
-              <ul>
-                <li><a href="http://drupal.org/node/466972">http://drupal.org/node/466972</a></li>
-                <li><a href="http://qa.drupal.org/node/44">http://qa.drupal.org/node/44</a></li>
-              </ul>
-            </li>
-          </ul>
-        </section>
-
-        <section>
-          <h2><em>Fin.</em></h2>
+          <h2><em>Fin! Uwian na!</em></h2>
+          <p>There is no cow level.</p>
         </section>
 
       </div>
