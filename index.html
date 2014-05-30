@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
 
-    <title>Chaos Tools Suite</title>
+    <title>Custom Module Development</title>
 
     <link rel="stylesheet" href="css/reveal.min.css">
     <link rel="stylesheet" href="css/theme/sky.css" id="theme">
@@ -20,59 +20,110 @@
       <div class="slides">
 
         <section>
-        <h1>Chaos tool suite</h1>
+        <h2>Custom Module Development</h2>
         </section>
 
         <section>
-        <h2>What is it?</h2>
-        <p>No need to explain. Everybody uses it! :D</p>
+        <h3>What are custom modules?</h3>
+        <p>Custom modules are created by developers to accomplish a specific use case that is required for a specific site. Drupal is flexible enough that you, as a developer, could easily extend it.</p>
         </section>
 
         <section>
-        <h2>What are its features?</h2>
-        <p>Atm, according to its <a href="https://drupal.org/project/ctools">project page</a>:</p>
+        <h3>Hooks</h3>
+        <p>Hooks are the main components that allow developers to change the way Drupal codes behave. Upon execution, Drupal searches for enabled modules (contributed, core, and custom) which implements a specific hook and calls that hook.</p>
+        </section>
+
+        <section>
+        <h3>Example hook:</h3>
+        <pre><code class="php">
+function EXAMPLE_form_alter(&$form, &$form_state, $form_id) {
+  if ($form_id == 'user_login') {
+    $form['username']['#description'] = t('Enter your username.');
+    $form['actions']['submit']['#title'] = t('Submit');
+    $form['#submit'][] = 'EXAMPLE_user_login_form';
+  }
+}
+        </code></pre>
+        </section>
+
+        <section>
+        <h3>Hooks Usage:</h3>
+        <p>Implement a hook (in this case hook_form_alter()) and name the function as MODULENAME_form_alter(). Copy the arguments used in the hook.</p>
+        </section>
+
+        <section>
+        <h3>Module Files:</h3>
         <ul>
-          <li>Plugins</li>
-          <li>Exportables</li>
-          <li>Ajax responder</li>
-          <li>Form tools</li>
-          <li>Object caching</li>
-          <li>Contexts</li>
-          <li>Modal dialog</li>
-          <li>Dependent</li>
-          <li>Content</li>
-          <li>Form wizard</li>
-          <li>CSS tools</li>
+          <li>module.info</li>
+          <li>module.module</li>
+          <li>module.install (optional)</li>
         </ul>
         </section>
 
         <section>
-        <h3>Where do I find the docs for using these? I.e. the API itself.</h3>
+        <h3>.info File:</h3>
+        <pre><code>
+name = Media
+description = Provides the core Media API
+package = Media
+core = 7.x
+
+dependencies[] = file_entity
+dependencies[] = image
+dependencies[] = views
+
+test_dependencies[] = token
+
+files[] = includes/MediaReadOnlyStreamWrapper.inc
+files[] = includes/MediaBrowserPluginInterface.inc
+files[] = includes/MediaBrowserPlugin.inc
+files[] = includes/MediaBrowserUpload.inc
+files[] = includes/MediaBrowserView.inc
+files[] = includes/MediaEntityTranslationHandler.inc
+files[] = includes/media_views_plugin_display_media_browser.inc
+files[] = includes/media_views_plugin_style_media_browser.inc
+files[] = tests/media.test
+files[] = tests/media.entity.test
+files[] = tests/media.file.usage.test
+
+configure = admin/config/media/browser
+        </pre></code>
+        </section>
+
+        <section>
+        <h3>.module File:</h3>
+        The module file can be an empty file with just the PHP opening tag. A module file is where you implement most of the common hooks. Without a module file, Drupal will not be able to detect that you are developing a new module.
+        </section>
+
+        <section>
+        <h3>.install File:</h3>
+        Install file is where you usually implement the hooks when your module is installed, enabled, uninstalled, or disabled. This includes installing the database tables required (hook_schema()) or defining the requirements before your module can be installed/enabled (hook_requirements()).
+        </section>
+
+        <section>
+        <h3>Create an Example Module:</h3>
+        <ol>
+          <li>Implement hook_schema() which installs a simple database.</li>
+          <li>Implement hook_menu() which displays two pages: a form and a page that displays the records.</li>
+          <li>Implement hook_block_info() and hook_block_view() to display the a certain number of recrods.</li>
+        </ol>
+        </section>
+
+        <section>
+        <h3>Helpful Modules:</h3>
         <ul>
-          <li>Install <a href="https://drupal.org/project/advanced_help">advanced_help</a>. Unfortunately, the documentation here isn't complete.</li>
-          <li>For plugins such as Content Types, Arguments, or Context, you can check the plugins provided by ctools itself under ctools/plugins/.</li>
-          <li>Check the comments on the files themselves e.g. ctools/includes/jump-menu.inc.</li>
-          <li>Install the example modules provided by ctools specifically <code>ctools_ajax_sample</code>, <code>ctools_custom_content</code>, and <code>ctools_plugin_example</code>.
+          <li><a href="http://drupal.org/project/devel">Devel</a></li>
+          <li><a href="http://drupal.org/project/examples">Examples</a></li>
+          <li><a href="https://drupal.org/project/coder">Coder</a></li>
+          <li><a href="https://drupal.org/project/schema">Schema</a></li>
         </ul>
         </section>
 
         <section>
-        <h2>Show me the money (or examples).</h2>
+        <h3>Resources:</h3>
         <ul>
-          <li><a href="https://github.com/dsdeiz/Practice-Modules">Practice Modules</a></li>
-          <li>Grinnell Megamenu</li>
-          <li><a href="http://webhead.grinnell.edu/">This</a>.</li>
-          <li><a href="http://forum.grinnell.edu/activities/events">And this</a>.</li>
-        </ul>
-        </section>
-
-        <section>
-        Extra: Check out <a href="http://www.emmet.io/">Emmet</a>. :D
-        </section>
-
-        <section>
-          <h2><em>Fin! Uwian na!</em></h2>
-          <p>There is no cow level.</p>
+          <li><a href="https://drupal.org/developing/modules">Module Development</a></li>
+          <li><a href="https://api.drupal.org/api/drupal">Drupal API</a></li>
         </section>
 
       </div>
@@ -103,7 +154,7 @@
           // { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
           { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
           // { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
-          // { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+          { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
           // { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
         ]
 
