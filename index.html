@@ -92,12 +92,67 @@ configure = admin/config/media/browser
 
         <section>
         <h3>.module File:</h3>
-        The module file can be an empty file with just the PHP opening tag. A module file is where you implement most of the common hooks. Without a module file, Drupal will not be able to detect that you are developing a new module.
+        <pre><code class="php">
+/**
+ * @file
+ * Render an administrative menu as a dropdown menu at the top of the window.
+ */
+
+/**
+ * Implements hook_help().
+ */
+function admin_menu_help($path, $arg) {
+  switch ($path) {
+    case 'admin/config/administration/admin_menu':
+      return '<p>' . t('The administration menu module provides a dropdown menu arranged for one- or two-click access to most administrative tasks and other common destinations (to users with the proper permissions). Use the settings below to customize the appearance of the menu.') . '</p>';
+
+    case 'admin/help#admin_menu':
+      $output = '';
+      $output .= '<p>' . t('The administration menu module provides a dropdown menu arranged for one- or two-click access to most administrative tasks and other common destinations (to users with the proper permissions). Administration menu also displays the number of anonymous and authenticated users, and allows modules to add their own custom menu items. Integration with the menu varies from module to module; the contributed module <a href="@drupal">Devel</a>, for instance, makes strong use of the administration menu module to provide quick access to development tools.', array('@drupal' => 'http://drupal.org/project/devel')) . '</p>';
+      $output .= '<p>' . t('The administration menu <a href="@settings">settings page</a> allows you to modify some elements of the menu\'s behavior and appearance. Since the appearance of the menu is dependent on your site theme, substantial customizations require modifications to your site\'s theme and CSS files. See the advanced module README.txt file for more information on theme and CSS customizations.', array('@settings' => url('admin/config/administration/admin_menu'))) . '</p>';
+      $output .= '<p>' . t('The menu items displayed in the administration menu depend upon the actual permissions of the viewer. First, the administration menu is only displayed to users in roles with the <em>Access administration menu</em> (admin_menu module) permission. Second, a user must be a member of a role with the <em>Access administration pages</em> (system module) permission to view administrative links. And, third, only currently permitted links are displayed; for example, if a user is not a member of a role with the permissions <em>Administer permissions</em> (user module) and <em>Administer users</em> (user module), the <em>User management</em> menu item is not displayed.') . '</p>';
+      return $output;
+  }
+}
+        </pre></code>
+        <aside class="notes">
+          The module file can be an empty file with just the PHP opening tag. A module file is where you implement most of the common hooks. Without a module file, Drupal will not be able to detect that you are developing a new module.
+        </aside>
         </section>
 
         <section>
         <h3>.install File:</h3>
-        Install file is where you usually implement the hooks when your module is installed, enabled, uninstalled, or disabled. This includes installing the database tables required (hook_schema()) or defining the requirements before your module can be installed/enabled (hook_requirements()).
+        <pre><code class="php">
+/**
+ * @file
+ * Install, update, and uninstall functions for the admin menu module.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function admin_menu_schema() {
+  $schema['cache_admin_menu'] = drupal_get_schema_unprocessed('system', 'cache');
+  $schema['cache_admin_menu']['description'] = 'Cache table for Administration menu to store client-side caching hashes.';
+  return $schema;
+}
+
+/**
+ * Implements hook_install().
+ */
+function admin_menu_install() {
+  // Increase the module weight, so admin_menu catches any alterations made by
+  // other modules in hook_menu_alter().
+  db_update('system')
+    ->fields(array('weight' => 100))
+    ->condition('type', 'module')
+    ->condition('name', 'admin_menu')
+    ->execute();
+}
+        </pre></code>
+        <aside class="notes">
+          Install file is where you usually implement the hooks when your module is installed, enabled, uninstalled, or disabled. This includes installing the database tables required (hook_schema()) or defining the requirements before your module can be installed/enabled (hook_requirements()).
+        </aside>
         </section>
 
         <section>
